@@ -14,8 +14,9 @@ export default function HomeScreen() {
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+          source={require('@/assets/images/index.png')}
+          style={styles.headerImage} // Updated style for proper placement
+          resizeMode="cover" // Ensures the image scales properly
         />
       }>
       <ThemedView style={[styles.titleContainer,{paddingTop:16}]} >
@@ -43,18 +44,18 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
     gap: 8,
   },
   stepContainer: {
     gap: 8,
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  headerImage: {
+    height: 250, // Increased height for better visibility
+    width: '100%', // Make the image span the full width
     position: 'absolute',
+    top: 0,
+    left: 0,
   },
 });

@@ -29,7 +29,20 @@ const UserForm = () => {
     ASF: "",
   });
   const [errors, setErrors] = useState({});
-
+  // EXAMPLE
+  // {
+  //   "M/F": "M", 
+  //   "Hand": "R",
+  //   "Age": "23",
+  //   "EDUC": "45", 
+  //   "SES": "12",
+  //   "MMSE": "56",
+  //   "CDR": "45",
+  //   "eTIV": "23",
+  //   "nWBV": "78",
+  // "ASF": "2.1"
+  
+  // }
   const scrollViewRef = useRef(null);
 
   // Validation functions

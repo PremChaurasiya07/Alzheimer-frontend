@@ -23,11 +23,10 @@ export default function TabTwoScreen() {
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
+        <Image
+          source={require('@/assets/images/page2.png')}
+          style={styles.headerImage} // Updated style for proper placement
+          resizeMode="contain" // Ensures the image scales properly
         />
       }>
       <ThemedView style={styles.titleContainer}>
@@ -80,10 +79,12 @@ export default function TabTwoScreen() {
 
 const styles = StyleSheet.create({
   headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+    width: '100%', // Ensure the image spans the full width of the screen
+    height: 261, // Adjust the height as needed
+    resizeMode: 'contain', // Ensure the image scales properly
+    margin: 0, // Remove any default margins
+    padding: 0, // Remove any default padding
+    position: 'relative', // Ensure proper positioning
   },
   titleContainer: {
     flexDirection: 'row',

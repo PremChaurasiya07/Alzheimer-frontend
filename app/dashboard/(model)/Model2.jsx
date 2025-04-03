@@ -1,213 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import {
-//   View,
-//   StyleSheet,
-//   Image,
-//   TouchableOpacity,
-//   KeyboardAvoidingView,
-//   ScrollView,
-//   Platform,
-//   Alert,
-// } from "react-native";
-// import { Text, Button, Card, ActivityIndicator } from "react-native-paper";
-// import * as ImagePicker from "expo-image-picker";
-// import axios from "axios";
-// import LottieView from "lottie-react-native";
-
-// const Model2Screen = () => {
-//   const [imageUri, setImageUri] = useState(null);
-//   const [loading, setLoading] = useState(false);
-
-//   useEffect(() => {
-//     (async () => {
-//       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-//       if (status !== "granted") {
-//         Alert.alert("Permission Denied", "You need to allow access to your gallery.");
-//       }
-//     })();
-//   }, []);
-
-//   const pickImage = async () => {
-//     try {
-//       const result = await ImagePicker.launchImageLibraryAsync({
-//         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-//         allowsEditing: true,
-//         quality: 1,
-//         base64: false, // Ensure no base64
-//       });
-
-//       if (!result.canceled && result.assets && result.assets.length > 0) {
-//         const uri = result.assets[0].uri;
-//         console.log("Picked image URI:", uri);
-//         if (uri.startsWith("data:image")) {
-//           console.warn("Received base64 URI instead of file URI");
-//           Alert.alert("Error", "Base64 URIs are not supported. Please try another image.");
-//           return;
-//         }
-//         setImageUri(uri);
-//       } else {
-//         console.warn("No image selected.");
-//       }
-//     } catch (error) {
-//       console.error("Error picking image:", error);
-//     }
-//   };
-
-//   const uploadImage = async () => {
-//     if (!imageUri) {
-//       Alert.alert("Error", "Please select an image first.");
-//       return;
-//     }
-
-//     setLoading(true);
-
-//     const filename = imageUri.split("/").pop() || "image.jpg"; // Fallback filename
-//     const match = /\.(\w+)$/.exec(filename);
-//     const type = match ? `image/${match[1]}` : "image/jpeg";
-//     const uri = Platform.OS === "android" && !imageUri.startsWith("file://")
-//       ? `file://${imageUri}`
-//       : imageUri;
-
-//     const formData = new FormData();
-//     formData.append("file", {
-//       uri: uri,
-//       name: filename,
-//       type: type,
-//     });
-
-//     console.log("Preparing to upload:", { uri, name: filename, type });
-
-//     try {
-//       const response = await axios.post(
-//         "http://192.168.0.111:10000/predict-mri", // Local testing
-//         // "https://alzhiemer-backened.onrender.com/predict-mri", // Hosted
-//         formData,
-//         {
-//           headers: {
-//             "Content-Type": "multipart/form-data",
-//             Accept: "application/json",
-//           },
-//           timeout: 10000, // 10-second timeout
-//         }
-//       );
-
-//       console.log("Response:", response.data);
-//       Alert.alert(
-//         "Prediction",
-//         `Class: ${response.data.prediction}\nConfidence: ${response.data.confidence.toFixed(2)}`
-//       );
-//     } catch (error) {
-//       console.error("Upload Error:", error.response?.data || error.message);
-//       Alert.alert(
-//         "Upload Failed",
-//         error.response?.data?.error || error.message
-//       );
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <KeyboardAvoidingView
-//       behavior={Platform.OS === "ios" ? "padding" : "height"}
-//       style={styles.container}
-//     >
-//       <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
-//         <View style={styles.animationContainer}>
-//           <LottieView
-//             source={require("../../../assets/animation1.json")}
-//             autoPlay
-//             loop
-//             style={styles.animation}
-//           />
-//         </View>
-
-//         <Card style={styles.card}>
-//           <Card.Content>
-//             <Text style={styles.title}>Upload an MRI Image</Text>
-
-//             <TouchableOpacity style={styles.uploadBox} onPress={pickImage}>
-//               {imageUri ? (
-//                 <Image source={{ uri: imageUri }} style={styles.image} />
-//               ) : (
-//                 <Text>Select an Image</Text>
-//               )}
-//             </TouchableOpacity>
-
-//             <Button
-//               mode="contained"
-//               style={styles.button}
-//               onPress={uploadImage}
-//               disabled={loading}
-//             >
-//               {loading ? "Uploading..." : "Upload"}
-//             </Button>
-//             {loading && <ActivityIndicator animating={true} size="large" style={styles.loader} />}
-//           </Card.Content>
-//         </Card>
-//       </ScrollView>
-//     </KeyboardAvoidingView>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#f4f4f4",
-//     padding: 20,
-//   },
-//   scrollContainer: {
-//     flexGrow: 1,
-//     justifyContent: "center",
-//   },
-//   animationContainer: {
-//     height: 180,
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   animation: {
-//     width: 150,
-//     height: 150,
-//   },
-//   card: {
-//     padding: 20,
-//     borderRadius: 15,
-//     elevation: 5,
-//     backgroundColor: "#fff",
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: "bold",
-//     alignSelf: "center",
-//     marginBottom: 20,
-//     color: "#6200ee",
-//   },
-//   uploadBox: {
-//     height: 200,
-//     backgroundColor: "#e0e0e0",
-//     borderRadius: 10,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     marginBottom: 15,
-//   },
-//   image: {
-//     width: "100%",
-//     height: "100%",
-//     borderRadius: 10,
-//   },
-//   button: {
-//     marginTop: 10,
-//     borderRadius: 8,
-//     backgroundColor: "#6200ee",
-//     paddingVertical: 8,
-//   },
-//   loader: {
-//     marginTop: 20,
-//   },
-// });
-
-// export default Model2Screen;
-
 import React, { useState, useRef } from "react";
 import axios from "axios";
 import {
@@ -216,6 +6,8 @@ import {
   ScrollView,
   Alert,
   Platform,
+  Image,
+  ImageBackground,
 } from "react-native";
 import { Text, Button, Card, ActivityIndicator } from "react-native-paper";
 import LottieView from "lottie-react-native";
@@ -223,8 +15,10 @@ import * as ImagePicker from "expo-image-picker"; // Use Expo Image Picker
 
 const ImageUploadForm = () => {
   const [predict, setPredict] = useState(null);
+  const [confidence, setConfidence] = useState(null); // Add state for confidence
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [responseImage, setResponseImage] = useState(null); // Add state for the Base64 image
   const fileInputRef = useRef(null); // For web file input
   const scrollViewRef = useRef(null); // For ScrollView
 
@@ -301,8 +95,9 @@ const ImageUploadForm = () => {
         }
       );
 
-      setPredict(response.data.prediction);
-
+      setPredict(response.data.prediction_num);
+      setConfidence(response.data.confidence); // Store the confidence value
+      console.log("Response:", response.data);
       setTimeout(() => {
         scrollViewRef.current?.scrollToEnd({ animated: true });
       }, 500);
@@ -382,11 +177,38 @@ const ImageUploadForm = () => {
               <View style={styles.resultContainer}>
                 <Text style={styles.resultText}>Prediction:</Text>
                 <Text style={styles.resultValue}>
-                  {predict === 1 ? "Dementia" : "Non-Dementia"}
+                  {predict === 0 || predict === 1 || predict === 3
+                    ? "Dementia"
+                    : predict === 2
+                    ? "Non-Dementia"
+                    : "No information"}
+                </Text>
+                <Text style={styles.confidenceText}>
+                  Confidence: {confidence ? `${confidence.toFixed(2)}%` : "N/A"}
                 </Text>
                 <Text style={styles.disclaimer}>
                   * AI-generated prediction. Please consult a medical professional for accurate diagnosis.
                 </Text>
+
+                {/* Display Uploaded Image with Overlay Text */}
+                {selectedImage && (
+                  <View style={styles.responseImageContainer}>
+                    <ImageBackground
+                      source={{ uri: selectedImage.uri }}
+                      style={styles.responseImage}
+                    >
+                      <View style={styles.overlayTextContainer}>
+                        <Text style={styles.overlayText}>
+                          {predict === 0 || predict === 1 || predict === 3
+                            ? "Dementia"
+                            : predict === 2
+                            ? "Non-Dementia"
+                            : ""}
+                        </Text>
+                      </View>
+                    </ImageBackground>
+                  </View>
+                )}
               </View>
             )}
 
@@ -452,7 +274,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 200,
-頑張ってねheight: 200,
+    height: 200,
     borderRadius: 10,
   },
   resultContainer: {
@@ -473,14 +295,51 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#6200ee",
   },
+  confidenceText: {
+    fontSize: 16,
+    color: "#333",
+    marginTop: 10,
+  },
   disclaimer: {
     marginTop: 10,
     fontSize: 12,
     color: "#999",
     fontStyle: "italic",
   },
+  responseImageContainer: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  responseImage: {
+    width: 200,
+    height: 200,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+  },
+  overlayTextContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+    borderRadius: 10,
+  },
+  overlayText: {
+    color: "#fff", // White text color
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
   loader: {
     marginTop: 20,
+  },
+  resultImage: {
+    width: 200,
+    height: 200,
+    marginTop: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
   },
 });
 
