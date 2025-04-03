@@ -1,3 +1,12 @@
+Download the apk from link / QR:
+https://expo.dev/accounts/prem7709/projects/frontend/builds/2cf49b26-effa-448f-b077-b0a1ee683485
+![image](https://github.com/user-attachments/assets/a75a53f8-1745-4021-97ed-04f2715f5c71)
+
+
+
+
+
+
 # Welcome to your Expo app 👋
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
