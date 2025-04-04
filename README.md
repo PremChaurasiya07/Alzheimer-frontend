@@ -2,7 +2,7 @@ Download the apk from link / QR:
 https://expo.dev/accounts/prem7709/projects/frontend/builds/2cf49b26-effa-448f-b077-b0a1ee683485
 ![image](https://github.com/user-attachments/assets/a75a53f8-1745-4021-97ed-04f2715f5c71)
 
-Web-app : https://alzheimerfrontend.vercel.app/
+Web-app : [https://alzheimerfrontend.vercel.app/](https://alzheimerfrontend-premchaurasiya07-prems-projects-629da43d.vercel.app/)
 
 
 
